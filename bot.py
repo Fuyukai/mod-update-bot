@@ -3,12 +3,14 @@ import time
 
 import curio
 import logging
+import multio
 import requests
 from curio.thread import AWAIT, async_thread
 from curious.core.httpclient import HTTPClient
 from typing import Dict
 from urllib.parse import quote
 
+multio.init("curio")
 http_client = HTTPClient(token=sys.argv[1])
 # manager = CommandsManager(client)
 # manager.register_events()
