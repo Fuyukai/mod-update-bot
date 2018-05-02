@@ -74,8 +74,8 @@ def scrape_mod_portal():
                 if not populating:
                     print("New mod:", name)
                     AWAIT(_do_send_new(mod))
-                else:
-                    print("Populating mod:", name)
+                # else:
+                    # print("Populating mod:", name)
             else:
                 if mods[name] != latest["version"]:
                     print("Updated mod:", name)
@@ -83,7 +83,10 @@ def scrape_mod_portal():
                     AWAIT(_do_send_update(mod))
 
         # unflip populating because we're successfully downloaded all mods
-        populating = False
+        if populating:
+            populating = False
+            print("Populated all mods.")
+
         print("Waiting 60 seconds to send mod data.")
         time.sleep(60)
 
