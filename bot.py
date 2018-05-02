@@ -9,32 +9,6 @@ from curious.core.httpclient import HTTPClient
 from typing import Dict
 from urllib.parse import quote
 
-
-@async_thread()
-def _make_request(self, *args, **kwargs):
-    """
-    Makes a request via the current session.
-
-    :returns: The response body.
-    """
-    headers = kwargs.get("headers", None)
-    if headers is not None:
-        headers.update(self.headers.copy())
-    else:
-        headers = self.headers.copy()
-
-    # ensure path is escaped
-    path = kwargs["path"]
-    path = quote(path)
-    kwargs["path"] = path
-
-    url = "https://discordapp.com/api/v7" + kwargs.pop("path")
-
-    return requests.request(*args, headers=headers, url=url, **kwargs)
-
-
-# monkeypatch to use requests.
-HTTPClient._make_request = _make_request
 http_client = HTTPClient(token=sys.argv[1])
 # manager = CommandsManager(client)
 # manager.register_events()
