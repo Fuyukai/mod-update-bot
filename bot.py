@@ -7,6 +7,7 @@ import multio
 import requests
 from curio.thread import AWAIT, async_thread
 from curious.core.httpclient import HTTPClient
+from requests import Timeout
 from typing import Dict
 from urllib.parse import quote
 
@@ -36,8 +37,16 @@ def scrape_mod_portal():
         params = {"page_size": "max"}
 
         for try_ in range(0, 10):
-            print("Scanning mods...")
-            page = requests.get(MODS_URL, params=params, headers=headers)
+            print("Scanning mods... (try {} out of 10)".format(try_ + 1))
+            try:
+                page = requests.get(MODS_URL, params=params, headers=headers,
+                                    timeout=10)
+            except Timeout:
+                print("Timed out.")
+                continue
+            except ConnectionError:
+                print("Connection error.")
+                continue
 
             # went a page too far
             if page.status_code == 404:
